@@ -12,10 +12,24 @@ import { useState } from 'react';
 import Head from 'next/head';
 
 import styles from '@/styles/modal.module.css';
-import { Modal } from '@/components/Modal';
+import { ModalConfirmacao } from '@/components/ModalConfirmacao';
 
 export default function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
+
+	function handleModalConfirm() {
+		setModalIsOpen(false);
+		alert('Confirmou Resposta');
+	}
+
+	function handleModalConfirmNegative() {
+		setModalIsOpen(false);
+		alert('Não Confirma Resposta');
+	}
+
+	function handleModalClose() {
+		setModalIsOpen(false);
+	}
 
 	return (
 		<>
@@ -26,6 +40,20 @@ export default function Home() {
 			</main>
 
 			{/* Renderizar modal de confirmação */}
+			<ModalConfirmacao 
+				children={undefined}	
+				isOpen={modalIsOpen}
+				title="Confirmação"
+
+				onClose={handleModalClose}
+				onNegativeConfirmation={handleModalConfirmNegative}
+				onPositiveConfirmation={handleModalConfirm}
+				footer={{
+					confirmTextNevative: "Não quero confirmar",
+					confirmTextPositive: "Sim, quero confirmar"
+					}} 		
+				>
+			</ModalConfirmacao>
 		</>
 	);
 }
