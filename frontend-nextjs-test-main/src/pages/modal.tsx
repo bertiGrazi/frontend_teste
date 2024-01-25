@@ -23,7 +23,7 @@ export default function Home() {
 
 	function renderModalContent() {
 		return (
-			<div data-modal-content className={styles['modal-form']}>
+			<div data-modal-content className={styles['modal-form']} onClick={(e) => e.stopPropagation()}>
 				<form onSubmit={() => false}>
 					<div>
 						<label htmlFor="input-name">Nome</label>
