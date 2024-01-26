@@ -1,32 +1,44 @@
-import { useState, useEffect } from 'react';
+// Counter.tsx
+
+import React, { useState, useEffect } from 'react';
 
 type CounterProps = {
-	initialCount: number;
+  initialCount: number;
+  onCounterUpdate: (updatedCount: number) => void;
 };
 
-export const Counter: React.FC<CounterProps> = ({ initialCount }) => {
-	const [count, setCount] = useState(initialCount);
+export const Counter: React.FC<CounterProps> = ({ initialCount, onCounterUpdate }) => {
+  const [count, setCount] = useState(initialCount);
 
-	useEffect(() => {
-		console.log('Componente montado!');
+  useEffect(() => {
+    onCounterUpdate(count); // Dispara onCounterUpdate quando o componente é montado
+    console.log('Componente montado!');
 
-		return () => {
-			console.log('Componente desmontado!');
-		};
-	}, []);
+    return () => {
+      console.log('Componente desmontado!');
+    };
+  }, []);
 
-	useEffect(() => {
-		console.log('Componente atualizado!');
-	});
+  useEffect(() => {
+    onCounterUpdate(count); // Dispara onCounterUpdate quando o componente é atualizado
+    console.log('Componente atualizado!');
+  }, [count, onCounterUpdate]);
 
-	const handleIncrement = () => {
-		setCount((prevCount) => prevCount + 1);
-	};
+  const handleIncrement = () => {
+    const updatedCount = count + 1;
+    setCount(updatedCount);
 
-	return (
-		<div>
-			<h2>Contador: {count}</h2>
-			<button onClick={handleIncrement}>Incrementar +</button>
-		</div>
-	);
+    if (updatedCount === 10) {
+      // Dispara onCounterUpdate e desmonta o componente quando o valor chega a 10
+      onCounterUpdate(updatedCount);
+      window.dispatchEvent(new CustomEvent('onCounterUnmount'));
+    }
+  };
+
+  return (
+    <div>
+      <h2>Contador: {count}</h2>
+      <button onClick={handleIncrement}>Incrementar +</button>
+    </div>
+  );
 };
